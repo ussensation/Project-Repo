@@ -1,4 +1,6 @@
 
+![E1](./img/E1.drawio.png)
+
 
 # Jenkins EC2
 
@@ -10,14 +12,18 @@ sudo apt update
 sudo apt install openjdk-11-jdk -y
 ```
 
-자바 설치
+우분투 패키지 네임 업데이트
+
+자바 개발자 도구 설치
+
+
 
 ```
 curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo tee \
     /usr/share/keyrings/jenkins-keyring.asc > /dev/null
 ```
 
-저장소 키 다운로드
+젠킨스 저장소 키 다운로드
 
 ```
 echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
@@ -25,33 +31,39 @@ echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
     /etc/apt/sources.list.d/jenkins.list > /dev/null
 ```
 
-패키지리스트에 추가
+우분투 패키지리스트에 추가
 
 ```
 sudo apt-get update
 sudo apt-get install fontconfig jenkins -y
 ```
 
+우분투 패키지 네임 업데이트
+
 젠킨스 설치
 
 ![002](./img/002.png)
+
 
 ```
 "192.30.252.0/22"
 "185.199.108.0/22"
 "140.82.112.0/20"
 ```
+GitHub Webhook IP
 
 ```
 sudo vim /etc/default/jenkins
 
 HTTP_PORT=9090
 ```
-젠킨스 액세스 포트 변경
+젠킨스 액세스 포트 8080 > 9090으로 변경
+미변경시 톰캣에서 8080을 기본으로 사용하기에 충돌 발생
 
-AWS 보안그룹에서 9090 포트, GitHub API IP 액세스 허용
+AWS 보안그룹에서 8080, 9090 포트, GitHub API IP 액세스 허용
 
 EC2 엔드포인트:9090으로 젠킨스 접속, 초기 세팅
+
 
 ![001](./img/001.png)
 
@@ -136,7 +148,7 @@ ssh-rsa ...
 
 # EC2 K8s
 
-Docker, Ansible, K8s 설치
+Docker, Ansible, K8s(Kubespay) 설치
 
 ```
 FROM tomcat:9-jre11-openjdk
@@ -294,7 +306,6 @@ kubectl apply -n argocd \
 ```
 
 argocd 설치
-
 
 
 접속 후 GitHub 저장소에서 yaml 파일 로드해서 실행
